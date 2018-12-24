@@ -1,36 +1,36 @@
 /// <reference path="Middleware.d.ts" />
-declare namespace Najs.Routing.Grammar {
+declare namespace NajsRouting.Grammar {
     type ControlChain<T, M> = Control<M> & Group<M> & Verbs<T, M> & Named<T, M>;
     type ControlNoVerbChain<M> = ControlNoVerb<M> & NamedNoVerb<M>;
     type GroupChain<M> = ControlOnly<M>;
     type VerbChain<M> = ControlNoVerb<M> & NamedNoVerb<M>;
     type NameChain<T, M> = ControlOnly<M> & Verbs<T, M>;
     type NameChainNoVerb<M> = ControlOnly<M>;
-    interface Routing<T = Routing.Target, M = Routing.Middleware> extends Control<T, M>, Group<M>, Named<T, M>, Verbs<T, M> {
+    interface Routing<T = Target, M = Middleware> extends Control<T, M>, Group<M>, Named<T, M>, Verbs<T, M> {
     }
-    interface Control<T = Routing.Target, M = Routing.Middleware> {
+    interface Control<T = Target, M = Middleware> {
         middleware(...middleware: Array<M | M[]>): ControlChain<T, M>;
         prefix(prefix: string): ControlChain<T, M>;
     }
-    interface ControlNoVerb<M = Routing.Middleware> {
+    interface ControlNoVerb<M = Middleware> {
         middleware(...middleware: Array<M | M[]>): ControlNoVerbChain<M>;
         prefix(prefix: string): ControlNoVerbChain<M>;
     }
-    interface ControlOnly<M = Routing.Middleware> {
+    interface ControlOnly<M = Middleware> {
         middleware(...middleware: Array<M | M[]>): ControlOnly<M>;
         prefix(prefix: string): ControlOnly<M>;
     }
-    interface Group<M = Routing.Middleware> {
+    interface Group<M = Middleware> {
         group(callback: () => void): GroupChain<M>;
     }
-    interface Named<T = Routing.Target, M = Routing.Middleware> {
+    interface Named<T = Target, M = Middleware> {
         name(name: string): NameChain<T, M>;
     }
-    interface NamedNoVerb<M = Routing.Middleware> {
+    interface NamedNoVerb<M = Middleware> {
         name(name: string): NameChainNoVerb<M>;
     }
-    interface Verbs<T = Routing.Target, M = Routing.Middleware> {
-        method(method: Routing.HttpMethod | 'all', path: string, target: T): VerbChain<M>;
+    interface Verbs<T = Target, M = Middleware> {
+        method(method: HttpMethod | 'all', path: string, target: T): VerbChain<M>;
         all(path: string, target: T): VerbChain<M>;
         checkout(path: string, target: T): VerbChain<M>;
         copy(path: string, target: T): VerbChain<M>;

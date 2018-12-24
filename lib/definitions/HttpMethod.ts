@@ -1,4 +1,4 @@
-namespace Najs.Routing {
+namespace NajsRouting {
   export type HttpMethod =
     | 'CHECKOUT'
     | 'COPY'

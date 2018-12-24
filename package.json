@@ -33,7 +33,7 @@
       "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
     },
     "testMatch": [
-      "**/test/*.test.ts",
+      "**/test/**/*.test.ts",
       "**/test/**/*.test.js"
     ],
     "testEnvironment": "node"

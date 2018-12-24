@@ -4,12 +4,12 @@
 /// <reference path="../definitions/Target.d.ts" />
 /// <reference path="../definitions/IRoute.d.ts" />
 /// <reference path="../definitions/IRouteBuilder.d.ts" />
-import Middleware = Najs.Routing.Middleware;
-import Target = Najs.Routing.Target;
-import IRoute = Najs.Routing.IRoute;
-import IRouteBuilder = Najs.Routing.IRouteBuilder;
-import MiddlewareResolver = Najs.Contracts.Routing.MiddlewareResolver;
-import TargetResolver = Najs.Contracts.Routing.TargetResolver;
+import Middleware = NajsRouting.Middleware;
+import Target = NajsRouting.Target;
+import IRoute = NajsRouting.IRoute;
+import IRouteBuilder = NajsRouting.IRouteBuilder;
+import MiddlewareResolver = NajsFramework.Contracts.Routing.MiddlewareResolver;
+import TargetResolver = NajsFramework.Contracts.Routing.TargetResolver;
 import { Facade } from 'najs-facade';
 export declare class RouteManager<T extends Target = Target, M = Middleware> extends Facade {
     getRoutes(): IRoute<T, M>[];

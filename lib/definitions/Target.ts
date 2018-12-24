@@ -1,3 +1,3 @@
-namespace Najs.Routing {
+namespace NajsRouting {
   export type Target = string
 }

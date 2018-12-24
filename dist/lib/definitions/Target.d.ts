@@ -1,3 +1,3 @@
-declare namespace Najs.Routing {
+declare namespace NajsRouting {
     type Target = string;
 }

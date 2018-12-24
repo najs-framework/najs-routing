@@ -1,7 +1,7 @@
 /// <reference path="../definitions/Target.ts" />
 
-namespace Najs.Contracts.Routing {
-  export interface TargetResolver<V extends object, T = Najs.Routing.Target> {
+namespace NajsFramework.Contracts.Routing {
+  export interface TargetResolver<V extends object, T = NajsRouting.Target> {
     isValid(target: T): boolean
 
     resolve(target: T): V

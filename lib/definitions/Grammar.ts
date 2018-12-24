@@ -1,6 +1,6 @@
 /// <reference path="./Middleware.ts" />
 
-namespace Najs.Routing.Grammar {
+namespace NajsRouting.Grammar {
   /*
    * The purpose of these interfaces is create a grammar for Route, it affects nothing to implementation side
    * This file has test in ~/test/syntax/..., if something went wrong errors will come out from build phase
@@ -16,44 +16,40 @@ namespace Najs.Routing.Grammar {
   export type NameChain<T, M> = ControlOnly<M> & Verbs<T, M>
   export type NameChainNoVerb<M> = ControlOnly<M>
 
-  export interface Routing<T = Routing.Target, M = Routing.Middleware>
-    extends Control<T, M>,
-      Group<M>,
-      Named<T, M>,
-      Verbs<T, M> {}
+  export interface Routing<T = Target, M = Middleware> extends Control<T, M>, Group<M>, Named<T, M>, Verbs<T, M> {}
 
-  export interface Control<T = Routing.Target, M = Routing.Middleware> {
+  export interface Control<T = Target, M = Middleware> {
     middleware(...middleware: Array<M | M[]>): ControlChain<T, M>
 
     prefix(prefix: string): ControlChain<T, M>
   }
 
-  export interface ControlNoVerb<M = Routing.Middleware> {
+  export interface ControlNoVerb<M = Middleware> {
     middleware(...middleware: Array<M | M[]>): ControlNoVerbChain<M>
 
     prefix(prefix: string): ControlNoVerbChain<M>
   }
 
-  export interface ControlOnly<M = Routing.Middleware> {
+  export interface ControlOnly<M = Middleware> {
     middleware(...middleware: Array<M | M[]>): ControlOnly<M>
 
     prefix(prefix: string): ControlOnly<M>
   }
 
-  export interface Group<M = Routing.Middleware> {
+  export interface Group<M = Middleware> {
     group(callback: () => void): GroupChain<M>
   }
 
-  export interface Named<T = Routing.Target, M = Routing.Middleware> {
+  export interface Named<T = Target, M = Middleware> {
     name(name: string): NameChain<T, M>
   }
 
-  export interface NamedNoVerb<M = Routing.Middleware> {
+  export interface NamedNoVerb<M = Middleware> {
     name(name: string): NameChainNoVerb<M>
   }
 
-  export interface Verbs<T = Routing.Target, M = Routing.Middleware> {
-    method(method: Routing.HttpMethod | 'all', path: string, target: T): VerbChain<M>
+  export interface Verbs<T = Target, M = Middleware> {
+    method(method: HttpMethod | 'all', path: string, target: T): VerbChain<M>
 
     all(path: string, target: T): VerbChain<M>
     checkout(path: string, target: T): VerbChain<M>

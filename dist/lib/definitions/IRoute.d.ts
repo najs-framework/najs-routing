@@ -1,7 +1,7 @@
 /// <reference path="Middleware.d.ts" />
 /// <reference path="Target.d.ts" />
 /// <reference path="HttpMethod.d.ts" />
-declare namespace Najs.Routing {
+declare namespace NajsRouting {
     interface IRoute<T extends Target = Target, M = Middleware> {
         name?: string;
         path: string;

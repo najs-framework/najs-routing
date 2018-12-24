@@ -2,7 +2,7 @@
 /// <reference path="./Middleware.ts" />
 /// <reference path="./Target.ts" />
 
-namespace Najs.Routing {
+namespace NajsRouting {
   export interface IRouteBuilder<T extends Target = Target, M = Middleware> extends Grammar.Routing<T, M> {
     getRoutes(): IRoute[]
 

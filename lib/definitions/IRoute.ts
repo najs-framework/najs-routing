@@ -2,7 +2,7 @@
 /// <reference path="./Target.ts" />
 /// <reference path="./HttpMethod.ts" />
 
-namespace Najs.Routing {
+namespace NajsRouting {
   export interface IRoute<T extends Target = Target, M = Middleware> {
     name?: string
     path: string
