@@ -1,0 +1,77 @@
+{
+  "name": "najs-routing",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "npm run build-ts && npm run tslint",
+    "build-ts": "tsc -d",
+    "coverage": "npm run build && jest ./dist/test --coverage --forceExit",
+    "test": "jest ./dist/test --forceExit",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "prepublishOnly": "tsc -d -p ./ --outDir dist"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json",
+        "skipBabel": true
+      }
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "**/test/*.test.ts",
+      "**/test/**/*.test.js"
+    ],
+    "testEnvironment": "node"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/najs-framework/najs-routing.git"
+  },
+  "author": {
+    "name": "Nhat Phan",
+    "email": "nhat@ntworld.net"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.7"
+  },
+  "peerDependencies": {
+    "najs-binding": "^1.8.0",
+    "najs-facade": "^1.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/express": "^4.11.0",
+    "@types/jest": "^21.1.8",
+    "@types/lodash": "^4.14.91",
+    "coveralls": "^3.0.0",
+    "jest": "^21.2.1",
+    "najs-binding": "^1.8.0",
+    "najs-facade": "^1.1.0",
+    "ts-jest": "^21.2.3",
+    "tslint": "^5.8.0",
+    "typescript": "^2.8.0"
+  }
+}
