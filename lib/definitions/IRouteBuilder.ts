@@ -4,7 +4,7 @@
 
 namespace NajsRouting {
   export interface IRouteBuilder<T extends Target = Target, M = Middleware> extends Grammar.Routing<T, M> {
-    getRoutes(): IRoute[]
+    getRoutes(parent?: IRoute<T, M>): IRoute<T, M>[]
 
     isContainer(): boolean
 

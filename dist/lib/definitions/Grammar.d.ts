@@ -29,8 +29,12 @@ declare namespace NajsRouting.Grammar {
     interface NamedNoVerb<M = Middleware> {
         name(name: string): NameChainNoVerb<M>;
     }
-    interface Verbs<T = Target, M = Middleware> {
+    interface Verbs<T = Target, M = Middleware> extends Method<T, M>, HttpVerbs<T, M> {
+    }
+    interface Method<T = Target, M = Middleware> {
         method(method: HttpMethod | 'all', path: string, target: T): VerbChain<M>;
+    }
+    interface HttpVerbs<T = Target, M = Middleware> {
         all(path: string, target: T): VerbChain<M>;
         checkout(path: string, target: T): VerbChain<M>;
         copy(path: string, target: T): VerbChain<M>;
