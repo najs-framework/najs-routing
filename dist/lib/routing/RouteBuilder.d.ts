@@ -11,7 +11,7 @@ export interface RouteBuilder<T extends Target = Target, M = Middleware> extends
 export declare class RouteBuilder<T extends Target = Target, M = Middleware> implements IRouteBuilder<T, M> {
     protected route: Route<T, M>;
     protected children: IRouteBuilder<T, M>[];
-    protected grouped: boolean;
+    protected isGrouping: boolean;
     constructor();
     getRoutes(parent?: IRoute<T, M>): IRoute<T, M>[];
     isContainer(): boolean;

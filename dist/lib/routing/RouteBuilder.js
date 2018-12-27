@@ -9,7 +9,7 @@ class RouteBuilder {
     constructor() {
         this.route = new Route_1.Route();
         this.children = [];
-        this.grouped = false;
+        this.isGrouping = false;
     }
     getRoutes(parent) {
         if (this.children.length === 0) {
@@ -23,7 +23,7 @@ class RouteBuilder {
         return lodash_1.flatten(result);
     }
     isContainer() {
-        return this.grouped;
+        return this.isGrouping;
     }
     appendChild(builder) {
         if (this.children.length === 0) {
@@ -47,9 +47,9 @@ class RouteBuilder {
         return this;
     }
     group(cb) {
-        this.grouped = true;
+        this.isGrouping = true;
         cb.call(undefined);
-        this.grouped = false;
+        this.isGrouping = false;
         return this;
     }
     name(name) {

@@ -15,12 +15,12 @@ export interface RouteBuilder<T extends Target = Target, M = Middleware> extends
 export class RouteBuilder<T extends Target = Target, M = Middleware> implements IRouteBuilder<T, M> {
   protected route: Route<T, M>
   protected children: IRouteBuilder<T, M>[]
-  protected grouped: boolean
+  protected isGrouping: boolean
 
   constructor() {
     this.route = new Route()
     this.children = []
-    this.grouped = false
+    this.isGrouping = false
   }
 
   getRoutes(parent?: IRoute<T, M>): IRoute<T, M>[] {
@@ -37,7 +37,7 @@ export class RouteBuilder<T extends Target = Target, M = Middleware> implements 
   }
 
   isContainer(): boolean {
-    return this.grouped
+    return this.isGrouping
   }
 
   appendChild(builder: IRouteBuilder<T, M>): void {
@@ -69,9 +69,9 @@ export class RouteBuilder<T extends Target = Target, M = Middleware> implements 
   }
 
   group(cb: () => void): any {
-    this.grouped = true
+    this.isGrouping = true
     cb.call(undefined)
-    this.grouped = false
+    this.isGrouping = false
 
     return this
   }
