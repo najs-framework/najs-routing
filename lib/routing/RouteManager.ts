@@ -1,3 +1,4 @@
+/// <reference path="../contracts/RouteManager.ts" />
 /// <reference path="../contracts/MiddlewareResolver.ts" />
 /// <reference path="../contracts/TargetResolver.ts" />
 /// <reference path="../definitions/Middleware.ts" />
@@ -12,32 +13,96 @@ import IRouteBuilder = NajsRouting.IRouteBuilder
 import MiddlewareResolver = NajsFramework.Contracts.Routing.MiddlewareResolver
 import TargetResolver = NajsFramework.Contracts.Routing.TargetResolver
 
+import { flatten } from 'lodash'
 import { Facade } from 'najs-facade'
+import { RouteNotFoundError } from '../errors/RouteNotFoundError'
 
-export class RouteManager<T extends Target = Target, M = Middleware> extends Facade {
+export class RouteManager<T extends Target = Target, M = Middleware> extends Facade
+  implements NajsFramework.Contracts.Routing.RouteManager<T, M> {
+  protected changed: boolean = false
+  protected builders: IRouteBuilder<T, M>[]
+  protected routes: IRoute<T, M>[]
+  protected routesNamed: { [key in string]: IRoute<T, M> }
+  protected middlewareRegistered: { [key in string]: MiddlewareResolver<object, M> }
+  protected middlewareResolvers: MiddlewareResolver<object, M>[]
+  protected targetRegistered: { [key in string]: TargetResolver<object, T> }
+  protected targetResolvers: TargetResolver<object, T>[]
+
+  constructor() {
+    super()
+    this.routes = []
+    this.routesNamed = {}
+  }
+
+  isChanged(): boolean {
+    return this.changed
+  }
+
   getRoutes(): IRoute<T, M>[] {
-    return [] as any
+    if (this.changed) {
+      const result = this.builders.map(builder => builder.getRoutes())
+      this.routes = flatten(result)
+      this.routesNamed = this.routes.reduce((memo, item) => {
+        if (item.name) {
+          // TODO: display warning message or error
+          // if (typeof memo[item.name] !== 'undefined' && this.options.duplicatedNameWarning) {
+          // Logger.warn('Duplicated named')
+          // }
+          memo[item.name] = item
+        }
+        return memo
+      }, {})
+      this.changed = false
+    }
+    return this.routes
+  }
+
+  addBuilder(builder: IRouteBuilder<T, M>): void {
+    this.changed = true
+
+    if (this.builders.length === 0) {
+      this.builders.push(builder)
+      return
+    }
+
+    const lastBuilder = this.builders[this.builders.length - 1]
+    if (lastBuilder.isContainer()) {
+      lastBuilder.appendChild(builder)
+      return
+    }
+
+    this.builders.push(builder)
   }
 
   hasRoute(name: string): boolean {
-    return false
+    return typeof this.routesNamed[name] !== 'undefined'
   }
 
   findOrFail(name: string): IRoute<T, M> {
-    return {} as any
+    this.getRoutes()
+    if (!this.hasRoute(name)) {
+      throw new RouteNotFoundError(name)
+    }
+    return this.routesNamed[name]
   }
 
-  addBuilder(builder: IRouteBuilder<T, M>): void {}
+  registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string): this {
+    this.targetRegistered[name] = resolver
+    this.targetResolvers = Object.values(this.targetRegistered)
+    return this
+  }
 
-  registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string) {}
-
-  registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, T>, name: string) {}
+  registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, M>, name: string): this {
+    this.middlewareRegistered[name] = resolver
+    this.middlewareResolvers = Object.values(this.middlewareRegistered)
+    return this
+  }
 
   getTargetResolvers(): TargetResolver<any, T>[] {
-    return [] as any
+    return this.targetResolvers
   }
 
-  getMiddlewareResolvers(): MiddlewareResolver<any, T>[] {
-    return [] as any
+  getMiddlewareResolvers(): MiddlewareResolver<any, M>[] {
+    return this.middlewareResolvers
   }
 }

@@ -9,8 +9,8 @@ declare namespace NajsFramework.Contracts.Routing {
         findOrFail(name: string): NajsRouting.IRoute<T, M>;
         addBuilder(builder: NajsRouting.IRouteBuilder<T, M>): void;
         registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string): this;
-        registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, T>, name: string): this;
+        registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, M>, name: string): this;
         getTargetResolvers(): TargetResolver<any, T>[];
-        getMiddlewareResolvers(): MiddlewareResolver<any, T>[];
+        getMiddlewareResolvers(): MiddlewareResolver<any, M>[];
     }
 }
