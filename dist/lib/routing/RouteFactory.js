@@ -7,7 +7,6 @@
 /// <reference path="../definitions/Target.ts" />
 /// <reference path="../definitions/HttpMethod.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
 const najs_facade_1 = require("najs-facade");
 const RouteBuilder_1 = require("./RouteBuilder");
 const HttpVerbs_1 = require("./mixin/HttpVerbs");
@@ -17,53 +16,26 @@ class RouteFactory extends najs_facade_1.Facade {
         this.manager = manager;
     }
     makeBuilder() {
-        return new RouteBuilder_1.RouteBuilder();
+        return new RouteBuilder_1.RouteBuilder(this.manager);
     }
-    validateMiddleware(middleware) {
-        return this.validateByResolvers(middleware, this.manager.getMiddlewareResolvers());
-    }
-    validateTarget(target) {
-        return this.validateByResolvers(target, this.manager.getTargetResolvers());
-    }
-    validateByResolvers(item, resolvers) {
-        for (const resolver of resolvers) {
-            if (!resolver.isValid(item)) {
-                return false;
-            }
-        }
-        return true;
+    usingBuilder(builder) {
+        this.manager.addBuilder(builder);
+        return builder;
     }
     middleware(...list) {
-        const middlewareList = lodash_1.flatten(list).filter(middleware => {
-            const isValid = this.validateMiddleware(middleware);
-            if (!isValid) {
-                // TODO: display warning message or error
-                return false;
-            }
-            return true;
-        });
-        this.manager.addBuilder(this.makeBuilder().middleware(...middlewareList));
-        return this;
+        return this.usingBuilder(this.makeBuilder().middleware(...list));
     }
     prefix(prefix) {
-        this.manager.addBuilder(this.makeBuilder().prefix(prefix));
-        return this;
+        return this.usingBuilder(this.makeBuilder().prefix(prefix));
     }
     group(cb) {
-        this.manager.addBuilder(this.makeBuilder().group(cb));
-        return this;
+        return this.usingBuilder(this.makeBuilder().group(cb));
     }
     name(name) {
-        this.manager.addBuilder(this.makeBuilder().name(name));
-        return this;
+        return this.usingBuilder(this.makeBuilder().name(name));
     }
     method(method, path, target) {
-        if (!this.validateTarget(target)) {
-            // TODO: display warning message or error
-            return this;
-        }
-        this.manager.addBuilder(this.makeBuilder().method(method, path, target));
-        return this;
+        return this.usingBuilder(this.makeBuilder().method(method, path, target));
     }
 }
 exports.RouteFactory = RouteFactory;

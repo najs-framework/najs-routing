@@ -15,11 +15,7 @@ export declare class RouteFactory<T extends Target = Target, M = Middleware> ext
     protected manager: RouteManagerContract<T, M>;
     constructor(manager: RouteManagerContract<T, M>);
     makeBuilder(): RouteBuilder<T, M>;
-    validateMiddleware(middleware: M): boolean;
-    validateTarget(target: T): boolean;
-    validateByResolvers(item: M | T, resolvers: Array<{
-        isValid(item: M | T): boolean;
-    }>): boolean;
+    usingBuilder(builder: RouteBuilder<T, M>): RouteBuilder<T, M>;
     middleware(...list: Array<M | M[]>): any;
     prefix(prefix: string): any;
     group(cb: () => void): any;

@@ -11,7 +11,6 @@ import Target = NajsRouting.Target
 import HttpMethod = NajsRouting.HttpMethod
 import RouteManagerContract = NajsFramework.Contracts.Routing.RouteManager
 
-import { flatten } from 'lodash'
 import { Facade } from 'najs-facade'
 import { RouteBuilder } from './RouteBuilder'
 import { HttpVerbs } from './mixin/HttpVerbs'
@@ -25,66 +24,32 @@ export class RouteFactory<T extends Target = Target, M = Middleware> extends Fac
   }
 
   makeBuilder(): RouteBuilder<T, M> {
-    return new RouteBuilder()
+    return new RouteBuilder(this.manager)
   }
 
-  validateMiddleware(middleware: M): boolean {
-    return this.validateByResolvers(middleware, this.manager.getMiddlewareResolvers())
-  }
-
-  validateTarget(target: T): boolean {
-    return this.validateByResolvers(target, this.manager.getTargetResolvers())
-  }
-
-  validateByResolvers(item: M | T, resolvers: Array<{ isValid(item: M | T): boolean }>): boolean {
-    for (const resolver of resolvers) {
-      if (!resolver.isValid(item)) {
-        return false
-      }
-    }
-    return true
+  usingBuilder(builder: RouteBuilder<T, M>): RouteBuilder<T, M> {
+    this.manager.addBuilder(builder)
+    return builder
   }
 
   middleware(...list: Array<M | M[]>): any {
-    const middlewareList = flatten(list).filter(middleware => {
-      const isValid = this.validateMiddleware(middleware)
-      if (!isValid) {
-        // TODO: display warning message or error
-        return false
-      }
-      return true
-    })
-    this.manager.addBuilder(this.makeBuilder().middleware(...middlewareList))
-
-    return this
+    return this.usingBuilder(this.makeBuilder().middleware(...list))
   }
 
   prefix(prefix: string): any {
-    this.manager.addBuilder(this.makeBuilder().prefix(prefix))
-
-    return this
+    return this.usingBuilder(this.makeBuilder().prefix(prefix))
   }
 
   group(cb: () => void): any {
-    this.manager.addBuilder(this.makeBuilder().group(cb))
-
-    return this
+    return this.usingBuilder(this.makeBuilder().group(cb))
   }
 
   name(name: string): any {
-    this.manager.addBuilder(this.makeBuilder().name(name))
-
-    return this
+    return this.usingBuilder(this.makeBuilder().name(name))
   }
 
   method(method: HttpMethod | 'all', path: string, target: T): any {
-    if (!this.validateTarget(target)) {
-      // TODO: display warning message or error
-      return this
-    }
-    this.manager.addBuilder(this.makeBuilder().method(method, path, target))
-
-    return this
+    return this.usingBuilder(this.makeBuilder().method(method, path, target))
   }
 }
 

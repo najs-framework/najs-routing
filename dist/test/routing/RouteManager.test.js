@@ -34,8 +34,8 @@ describe('RouteManager', function () {
         });
         it('loops all "builders" then map by builder.getRoutes(), then flatten result', function () {
             const manager = new RouteManager_1.RouteManager();
-            const builderA = new RouteBuilder_1.RouteBuilder();
-            const builderB = new RouteBuilder_1.RouteBuilder();
+            const builderA = new RouteBuilder_1.RouteBuilder(manager);
+            const builderB = new RouteBuilder_1.RouteBuilder(manager);
             const stubA = Sinon.stub(builderA, 'getRoutes');
             stubA.returns({ name: 'a' });
             const stubB = Sinon.stub(builderB, 'getRoutes');
@@ -46,9 +46,9 @@ describe('RouteManager', function () {
         });
         it('also build the "routesNamed" by reduce "routes" with name', function () {
             const manager = new RouteManager_1.RouteManager();
-            const builderA = new RouteBuilder_1.RouteBuilder();
-            const builderB = new RouteBuilder_1.RouteBuilder();
-            const builderC = new RouteBuilder_1.RouteBuilder();
+            const builderA = new RouteBuilder_1.RouteBuilder(manager);
+            const builderB = new RouteBuilder_1.RouteBuilder(manager);
+            const builderC = new RouteBuilder_1.RouteBuilder(manager);
             const a = { name: 'a' };
             const b = { name: 'b' };
             const c = {};
@@ -68,16 +68,16 @@ describe('RouteManager', function () {
     describe('.addBuilder()', function () {
         it('simply add the given builder to "builders" property if it empty, then set "changed" to true', function () {
             const manager = new RouteManager_1.RouteManager();
-            const builder = new RouteBuilder_1.RouteBuilder();
+            const builder = new RouteBuilder_1.RouteBuilder(manager);
             manager.addBuilder(builder);
             expect(manager['builders']).toEqual([builder]);
             expect(manager.isChanged()).toBe(true);
         });
         it('check the last builder is container or not, if yes it calls lastBuilder.appendChild()', function () {
             const manager = new RouteManager_1.RouteManager();
-            const lastBuilder = new RouteBuilder_1.RouteBuilder();
+            const lastBuilder = new RouteBuilder_1.RouteBuilder(manager);
             lastBuilder['isGrouping'] = true;
-            const builder = new RouteBuilder_1.RouteBuilder();
+            const builder = new RouteBuilder_1.RouteBuilder(manager);
             const spy = Sinon.spy(lastBuilder, 'appendChild');
             manager.addBuilder(lastBuilder);
             manager.addBuilder(builder);
@@ -87,9 +87,9 @@ describe('RouteManager', function () {
         });
         it('check the last builder is container or not, if no it simply add builder to "builders" property', function () {
             const manager = new RouteManager_1.RouteManager();
-            const lastBuilder = new RouteBuilder_1.RouteBuilder();
+            const lastBuilder = new RouteBuilder_1.RouteBuilder(manager);
             lastBuilder['isGrouping'] = false;
-            const builder = new RouteBuilder_1.RouteBuilder();
+            const builder = new RouteBuilder_1.RouteBuilder(manager);
             const spy = Sinon.spy(lastBuilder, 'appendChild');
             manager.addBuilder(lastBuilder);
             manager.addBuilder(builder);
