@@ -14,16 +14,21 @@ class RouteManager extends najs_facade_1.Facade {
     constructor() {
         super();
         this.changed = false;
+        this.builders = [];
         this.routes = [];
         this.routesNamed = {};
+        this.changed = false;
+        this.targetRegistered = {};
+        this.targetResolvers = [];
+        this.middlewareRegistered = {};
+        this.middlewareResolvers = [];
     }
     isChanged() {
         return this.changed;
     }
     getRoutes() {
         if (this.changed) {
-            const result = this.builders.map(builder => builder.getRoutes());
-            this.routes = lodash_1.flatten(result);
+            this.routes = lodash_1.flatten(this.builders.map(builder => builder.getRoutes()));
             this.routesNamed = this.routes.reduce((memo, item) => {
                 if (item.name) {
                     // TODO: display warning message or error

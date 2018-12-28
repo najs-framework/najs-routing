@@ -30,8 +30,14 @@ export class RouteManager<T extends Target = Target, M = Middleware> extends Fac
 
   constructor() {
     super()
+    this.builders = []
     this.routes = []
     this.routesNamed = {}
+    this.changed = false
+    this.targetRegistered = {}
+    this.targetResolvers = []
+    this.middlewareRegistered = {}
+    this.middlewareResolvers = []
   }
 
   isChanged(): boolean {
@@ -40,8 +46,7 @@ export class RouteManager<T extends Target = Target, M = Middleware> extends Fac
 
   getRoutes(): IRoute<T, M>[] {
     if (this.changed) {
-      const result = this.builders.map(builder => builder.getRoutes())
-      this.routes = flatten(result)
+      this.routes = flatten(this.builders.map(builder => builder.getRoutes()))
       this.routesNamed = this.routes.reduce((memo, item) => {
         if (item.name) {
           // TODO: display warning message or error
