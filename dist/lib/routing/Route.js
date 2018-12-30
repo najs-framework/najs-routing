@@ -10,6 +10,10 @@ class Route {
         this.middleware = [];
         this.isMerged = false;
     }
+    setType(type) {
+        this.type = type;
+        return this;
+    }
     setMethod(method) {
         this.method = method;
         return this;
@@ -72,6 +76,7 @@ class Route {
         }
         this.mergeParentData(parent);
         return {
+            type: this.type,
             name: this.name,
             method: this.method,
             path: this.path,

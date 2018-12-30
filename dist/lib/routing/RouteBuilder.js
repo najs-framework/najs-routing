@@ -30,10 +30,32 @@ class RouteBuilder {
         }
         return false;
     }
+    resolveMiddleware(middleware) {
+        return this.resolveByResolvers(middleware, this.manager.getMiddlewareResolvers());
+    }
+    resolveTarget(target) {
+        return this.resolveByResolvers(target, this.manager.getTargetResolvers());
+    }
+    resolveByResolvers(item, resolvers) {
+        if (resolvers.length === 0) {
+            return undefined;
+        }
+        for (const resolver of resolvers) {
+            if (resolver.isValid(item)) {
+                return resolver.resolve(item);
+            }
+        }
+        return undefined;
+    }
     getRoutes(parent) {
         if (this.children.length === 0) {
             const data = this.route.getData(parent);
-            return data ? [data] : [];
+            if (data) {
+                data['resolvedMiddleware'] = data.middleware.map(middleware => this.resolveMiddleware(middleware));
+                data['resolvedTarget'] = this.resolveTarget(data.target);
+                return [data];
+            }
+            return [];
         }
         this.route.mergeParentData(parent);
         const result = this.children.map(item => {
@@ -83,7 +105,10 @@ class RouteBuilder {
         return this;
     }
     method(method, path, target) {
-        this.route.setMethod(method).setPath(path);
+        this.route
+            .setMethod(method)
+            .setPath(path)
+            .setArguments(arguments);
         if (!this.validateTarget(target)) {
             // TODO: display warning message or error
             return this;

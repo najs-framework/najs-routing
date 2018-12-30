@@ -12,15 +12,23 @@ import HttpMethod = NajsRouting.HttpMethod
 import RouteManagerContract = NajsFramework.Contracts.Routing.RouteManager
 
 import { Facade } from 'najs-facade'
+import { register } from 'najs-binding'
 import { RouteBuilder } from './RouteBuilder'
 import { HttpVerbs } from './mixin/HttpVerbs'
+import { ClassNames } from '../constants'
 
-export class RouteFactory<T extends Target = Target, M = Middleware> extends Facade {
+export class RouteFactory<T = Target, M = Middleware> extends Facade {
+  static className: string = ClassNames.RouteFactory
+
   protected manager: RouteManagerContract<T, M>
 
   constructor(manager: RouteManagerContract<T, M>) {
     super()
     this.manager = manager
+  }
+
+  getClassName() {
+    return ClassNames.RouteFactory
   }
 
   makeBuilder(): RouteBuilder<T, M> {
@@ -54,3 +62,4 @@ export class RouteFactory<T extends Target = Target, M = Middleware> extends Fac
 }
 
 Object.assign(RouteFactory.prototype, HttpVerbs)
+register(RouteFactory, ClassNames.RouteFactory)

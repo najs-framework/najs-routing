@@ -3,8 +3,8 @@
 /// <reference path="./Target.ts" />
 
 namespace NajsRouting {
-  export interface IRouteBuilder<T extends Target = Target, M = Middleware> extends Grammar.Routing<T, M> {
-    getRoutes(parent?: IRoute<T, M>): IRoute<T, M>[]
+  export interface IRouteBuilder<T = Target, M = Middleware> extends Grammar.Routing<T, M> {
+    getRoutes(parent?: IRoute<T, M>): IRouteData<T, M>[]
 
     isContainer(): boolean
 

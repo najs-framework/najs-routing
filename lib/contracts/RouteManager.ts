@@ -4,7 +4,7 @@
 /// <reference path="../definitions/IRouteBuilder.ts" />
 
 namespace NajsFramework.Contracts.Routing {
-  export interface RouteManager<T extends NajsRouting.Target = NajsRouting.Target, M = NajsRouting.Middleware> {
+  export interface RouteManager<T = NajsRouting.Target, M = NajsRouting.Middleware> {
     getRoutes(): NajsRouting.IRoute<T, M>[]
 
     hasRoute(name: string): boolean
@@ -13,9 +13,9 @@ namespace NajsFramework.Contracts.Routing {
 
     addBuilder(builder: NajsRouting.IRouteBuilder<T, M>): void
 
-    registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string): this
+    registerTargetResolver<V>(resolver: TargetResolver<V, T>, name: string): this
 
-    registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, M>, name: string): this
+    registerMiddlewareResolver<V>(resolver: MiddlewareResolver<V, M>, name: string): this
 
     getTargetResolvers(): TargetResolver<any, T>[]
 

@@ -9,6 +9,14 @@ describe('Route', function() {
     })
   })
 
+  describe('.setType()', function() {
+    it('is chainable, simply a setter of "type" property', function() {
+      const route = new Route()
+      expect(route.setType('any') === route).toBe(true)
+      expect(route['type']).toEqual('any')
+    })
+  })
+
   describe('.setMethod()', function() {
     it('is chainable, simply a setter of "method" property', function() {
       const route = new Route()
@@ -157,6 +165,7 @@ describe('Route', function() {
 
       route.mergeParentData(parent)
       expect(route.getData()).toEqual({
+        type: undefined,
         name: undefined,
         method: 'GET',
         path: '/',
@@ -179,6 +188,7 @@ describe('Route', function() {
 
       route.mergeParentData(parent)
       expect(route.getData()).toEqual({
+        type: undefined,
         name: undefined,
         method: 'GET',
         path: '/',
@@ -201,6 +211,7 @@ describe('Route', function() {
 
       route.mergeParentData(parent)
       expect(route.getData()).toEqual({
+        type: undefined,
         name: undefined,
         method: 'GET',
         path: '/',
@@ -212,6 +223,7 @@ describe('Route', function() {
       parent.setPrefix('new-prefix').setMiddleware('b', 'c')
       route.mergeParentData(parent)
       expect(route.getData()).toEqual({
+        type: undefined,
         name: undefined,
         method: 'GET',
         path: '/',
@@ -259,6 +271,7 @@ describe('Route', function() {
           .setMiddleware('a')
           .getData(parent)
       ).toEqual({
+        type: undefined,
         name: undefined,
         method: 'GET',
         path: '/',

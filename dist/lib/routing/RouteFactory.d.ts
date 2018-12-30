@@ -11,9 +11,11 @@ import HttpMethod = NajsRouting.HttpMethod;
 import RouteManagerContract = NajsFramework.Contracts.Routing.RouteManager;
 import { Facade } from 'najs-facade';
 import { RouteBuilder } from './RouteBuilder';
-export declare class RouteFactory<T extends Target = Target, M = Middleware> extends Facade {
+export declare class RouteFactory<T = Target, M = Middleware> extends Facade {
+    static className: string;
     protected manager: RouteManagerContract<T, M>;
     constructor(manager: RouteManagerContract<T, M>);
+    getClassName(): string;
     makeBuilder(): RouteBuilder<T, M>;
     usingBuilder(builder: RouteBuilder<T, M>): RouteBuilder<T, M>;
     middleware(...list: Array<M | M[]>): any;

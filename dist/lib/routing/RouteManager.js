@@ -9,6 +9,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = require("lodash");
 const najs_facade_1 = require("najs-facade");
+const najs_binding_1 = require("najs-binding");
+const constants_1 = require("../constants");
 const RouteNotFoundError_1 = require("../errors/RouteNotFoundError");
 class RouteManager extends najs_facade_1.Facade {
     constructor() {
@@ -22,6 +24,9 @@ class RouteManager extends najs_facade_1.Facade {
         this.targetResolvers = [];
         this.middlewareRegistered = {};
         this.middlewareResolvers = [];
+    }
+    getClassName() {
+        return constants_1.ClassNames.RouteManager;
     }
     isChanged() {
         return this.changed;
@@ -83,4 +88,6 @@ class RouteManager extends najs_facade_1.Facade {
         return this.middlewareResolvers;
     }
 }
+RouteManager.className = constants_1.ClassNames.RouteManager;
 exports.RouteManager = RouteManager;
+najs_binding_1.register(RouteManager, constants_1.ClassNames.RouteManager);

@@ -7,11 +7,16 @@ const HttpMethod_1 = require("../../lib/routing/HttpMethod");
 const RouteManager_1 = require("../../lib/routing/RouteManager");
 const RouteFactory_1 = require("../../lib/routing/RouteFactory");
 describe('RouteFactory', function () {
+    it('extends Facade, implements IAutoload under name "NajsRouting.RouteFactory"', function () {
+        const manager = new RouteManager_1.RouteManager();
+        const factory = new RouteFactory_1.RouteFactory(manager);
+        expect(factory).toBeInstanceOf(najs_facade_1.Facade);
+        expect(factory.getClassName()).toEqual('NajsRouting.RouteFactory');
+    });
     describe('constructor()', function () {
-        it('extends Facade, needs RouteManager in params and assigns to "manager" property', function () {
+        it('needs RouteManager in params and assigns to "manager" property', function () {
             const manager = new RouteManager_1.RouteManager();
             const factory = new RouteFactory_1.RouteFactory(manager);
-            expect(factory).toBeInstanceOf(najs_facade_1.Facade);
             expect(factory['manager'] === manager).toBe(true);
         });
     });

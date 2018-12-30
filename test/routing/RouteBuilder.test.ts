@@ -93,6 +93,100 @@ describe('RouteBuilder', function() {
     })
   })
 
+  describe('.resolveMiddleware()', function() {
+    it('returns undefined if there is no resolvers provided by RouteManager', function() {
+      const manager = new RouteManager()
+      const builder = new RouteBuilder(manager)
+      expect(builder.resolveMiddleware('any')).toBeUndefined()
+    })
+
+    it('loops middlewareResolvers provided by RouteManager then returns .resolve() if .isValid() of any resolver returns true', function() {
+      const resolverA: any = {
+        isValid(name: string) {
+          return name === 'a'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const resolverB: any = {
+        isValid(name: string) {
+          return name === 'b'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const resolverC: any = {
+        isValid(name: string) {
+          return name === 'c'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const manager = new RouteManager()
+      manager
+        .registerMiddlewareResolver(resolverA, 'a')
+        .registerMiddlewareResolver(resolverB, 'b')
+        .registerMiddlewareResolver(resolverC, 'c')
+      const builder = new RouteBuilder(manager)
+      expect(builder.resolveMiddleware('a')).toEqual('a-resolved')
+      expect(builder.resolveMiddleware('b')).toEqual('b-resolved')
+      expect(builder.resolveMiddleware('any')).toBeUndefined()
+    })
+  })
+
+  describe('.resolveTarget()', function() {
+    it('returns undefined if there is no resolvers provided by RouteManager', function() {
+      const manager = new RouteManager()
+      const builder = new RouteBuilder(manager)
+      expect(builder.resolveTarget('any')).toBeUndefined()
+    })
+
+    it('loops targetResolvers provided by RouteManager then returns .resolve() if .isValid() of any resolver returns true', function() {
+      const resolverA: any = {
+        isValid(name: string) {
+          return name === 'a'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const resolverB: any = {
+        isValid(name: string) {
+          return name === 'b'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const resolverC: any = {
+        isValid(name: string) {
+          return name === 'c'
+        },
+        resolve(name: string) {
+          return name + '-resolved'
+        }
+      }
+
+      const manager = new RouteManager()
+      manager
+        .registerTargetResolver(resolverA, 'a')
+        .registerTargetResolver(resolverB, 'b')
+        .registerTargetResolver(resolverC, 'c')
+      const builder = new RouteBuilder(manager)
+      expect(builder.resolveTarget('a')).toEqual('a-resolved')
+      expect(builder.resolveTarget('b')).toEqual('b-resolved')
+      expect(builder.resolveTarget('any')).toBeUndefined()
+    })
+  })
+
   describe('.getRoutes()', function() {
     it('returns an empty array if there is no children and current "route" returns undefined', function() {
       const manager = new RouteManager()
@@ -100,12 +194,32 @@ describe('RouteBuilder', function() {
       expect(builder.getRoutes()).toEqual([])
     })
 
-    it('returns an array with data from "route" if there is no children', function() {
+    it('returns an array with data from "route" and resolvedMiddleware + resolvedTarget if there is no children', function() {
       const manager = new RouteManager()
       const builder = new RouteBuilder(manager)
       const stub = Sinon.stub(builder['route'], 'getData')
-      expect(stub.returns('anything'))
-      expect(builder.getRoutes()).toEqual(['anything'])
+      const routeRata = {
+        middleware: ['a', 'b'],
+        target: 'target'
+      }
+      const resolveMiddlewareStub = Sinon.stub(builder, 'resolveMiddleware')
+      resolveMiddlewareStub.callsFake(function(item) {
+        return item + '-resolved'
+      })
+      const resolveTargetStub = Sinon.stub(builder, 'resolveTarget')
+      resolveTargetStub.callsFake(function(item) {
+        return item + '-resolved'
+      })
+
+      expect(stub.returns(routeRata))
+      expect(builder.getRoutes()).toEqual([
+        {
+          middleware: ['a', 'b'],
+          target: 'target',
+          resolvedMiddleware: ['a-resolved', 'b-resolved'],
+          resolvedTarget: 'target-resolved'
+        }
+      ])
     })
 
     it('calls "route".mergeParentData() then map children with it\'s .getRoutes() function', function() {

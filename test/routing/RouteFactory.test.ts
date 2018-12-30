@@ -6,11 +6,17 @@ import { RouteManager } from '../../lib/routing/RouteManager'
 import { RouteFactory } from '../../lib/routing/RouteFactory'
 
 describe('RouteFactory', function() {
+  it('extends Facade, implements IAutoload under name "NajsRouting.RouteFactory"', function() {
+    const manager = new RouteManager()
+    const factory = new RouteFactory(manager)
+    expect(factory).toBeInstanceOf(Facade)
+    expect(factory.getClassName()).toEqual('NajsRouting.RouteFactory')
+  })
+
   describe('constructor()', function() {
-    it('extends Facade, needs RouteManager in params and assigns to "manager" property', function() {
+    it('needs RouteManager in params and assigns to "manager" property', function() {
       const manager = new RouteManager()
       const factory = new RouteFactory(manager)
-      expect(factory).toBeInstanceOf(Facade)
       expect(factory['manager'] === manager).toBe(true)
     })
   })

@@ -16,14 +16,6 @@
         "skipBabel": true
       }
     },
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    },
     "moduleFileExtensions": [
       "js",
       "ts",
@@ -36,7 +28,13 @@
       "**/test/**/*.test.ts",
       "**/test/**/*.test.js"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "dist/lib/**/*.js",
+      "!dist/lib/builtin.js",
+      "!dist/lib/contracts/**/*.js",
+      "!dist/lib/definitions/**/*.js"
+    ]
   },
   "files": [
     "dist/**/*"

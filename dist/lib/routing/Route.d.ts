@@ -6,7 +6,8 @@ import HttpMethod = NajsRouting.HttpMethod;
 import Middleware = NajsRouting.Middleware;
 import Target = NajsRouting.Target;
 import IRoute = NajsRouting.IRoute;
-export declare class Route<T extends Target = Target, M = Middleware> {
+export declare class Route<T = Target, M = Middleware> {
+    protected type?: string;
     protected name?: string;
     protected method?: HttpMethod | 'all';
     protected path?: string;
@@ -16,6 +17,7 @@ export declare class Route<T extends Target = Target, M = Middleware> {
     protected arguments?: any[];
     protected isMerged: boolean;
     constructor();
+    setType(type: string): this;
     setMethod(method: HttpMethod | 'all'): this;
     setName(name: string): this;
     setPath(path: string): this;

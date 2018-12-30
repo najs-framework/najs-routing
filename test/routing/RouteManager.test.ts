@@ -6,6 +6,12 @@ import { RouteNotFoundError } from '../../lib/errors/RouteNotFoundError'
 import { RouteBuilder } from '../../lib/routing/RouteBuilder'
 
 describe('RouteManager', function() {
+  it('extends Facade, implements IAutoload under name "NajsRouting.RouteManager"', function() {
+    const manager = new RouteManager()
+    expect(manager).toBeInstanceOf(Facade)
+    expect(manager.getClassName()).toEqual('NajsRouting.RouteManager')
+  })
+
   describe('constructor()', function() {
     it('extends Facade, init "routes", "builders" to empty array and "routesNamed" to empty object', function() {
       const manager = new RouteManager()

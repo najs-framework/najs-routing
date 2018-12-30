@@ -8,12 +8,17 @@
 /// <reference path="../definitions/HttpMethod.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const najs_facade_1 = require("najs-facade");
+const najs_binding_1 = require("najs-binding");
 const RouteBuilder_1 = require("./RouteBuilder");
 const HttpVerbs_1 = require("./mixin/HttpVerbs");
+const constants_1 = require("../constants");
 class RouteFactory extends najs_facade_1.Facade {
     constructor(manager) {
         super();
         this.manager = manager;
+    }
+    getClassName() {
+        return constants_1.ClassNames.RouteFactory;
     }
     makeBuilder() {
         return new RouteBuilder_1.RouteBuilder(this.manager);
@@ -38,5 +43,7 @@ class RouteFactory extends najs_facade_1.Facade {
         return this.usingBuilder(this.makeBuilder().method(method, path, target));
     }
 }
+RouteFactory.className = constants_1.ClassNames.RouteFactory;
 exports.RouteFactory = RouteFactory;
 Object.assign(RouteFactory.prototype, HttpVerbs_1.HttpVerbs);
+najs_binding_1.register(RouteFactory, constants_1.ClassNames.RouteFactory);

@@ -12,7 +12,8 @@ import IRouteBuilder = NajsRouting.IRouteBuilder;
 import MiddlewareResolver = NajsFramework.Contracts.Routing.MiddlewareResolver;
 import TargetResolver = NajsFramework.Contracts.Routing.TargetResolver;
 import { Facade } from 'najs-facade';
-export declare class RouteManager<T extends Target = Target, M = Middleware> extends Facade implements NajsFramework.Contracts.Routing.RouteManager<T, M> {
+export declare class RouteManager<T = Target, M = Middleware> extends Facade implements NajsFramework.Contracts.Routing.RouteManager<T, M> {
+    static className: string;
     protected changed: boolean;
     protected builders: IRouteBuilder<T, M>[];
     protected routes: IRoute<T, M>[];
@@ -20,21 +21,22 @@ export declare class RouteManager<T extends Target = Target, M = Middleware> ext
         [key in string]: IRoute<T, M>;
     };
     protected middlewareRegistered: {
-        [key in string]: MiddlewareResolver<object, M>;
+        [key in string]: MiddlewareResolver<any, M>;
     };
     protected middlewareResolvers: MiddlewareResolver<object, M>[];
     protected targetRegistered: {
-        [key in string]: TargetResolver<object, T>;
+        [key in string]: TargetResolver<any, T>;
     };
     protected targetResolvers: TargetResolver<object, T>[];
     constructor();
+    getClassName(): string;
     isChanged(): boolean;
     getRoutes(): IRoute<T, M>[];
     addBuilder(builder: IRouteBuilder<T, M>): void;
     hasRoute(name: string): boolean;
     findOrFail(name: string): IRoute<T, M>;
-    registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string): this;
-    registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, M>, name: string): this;
+    registerTargetResolver<V>(resolver: TargetResolver<V, T>, name: string): this;
+    registerMiddlewareResolver<V>(resolver: MiddlewareResolver<V, M>, name: string): this;
     getTargetResolvers(): TargetResolver<any, T>[];
     getMiddlewareResolvers(): MiddlewareResolver<any, M>[];
 }

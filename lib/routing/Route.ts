@@ -8,7 +8,8 @@ import Middleware = NajsRouting.Middleware
 import Target = NajsRouting.Target
 import IRoute = NajsRouting.IRoute
 
-export class Route<T extends Target = Target, M = Middleware> {
+export class Route<T = Target, M = Middleware> {
+  protected type?: string
   protected name?: string
   protected method?: HttpMethod | 'all'
   protected path?: string
@@ -22,6 +23,11 @@ export class Route<T extends Target = Target, M = Middleware> {
     this.prefix = ''
     this.middleware = []
     this.isMerged = false
+  }
+
+  setType(type: string): this {
+    this.type = type
+    return this
   }
 
   setMethod(method: HttpMethod | 'all'): this {
@@ -103,6 +109,7 @@ export class Route<T extends Target = Target, M = Middleware> {
 
     this.mergeParentData(parent)
     return {
+      type: this.type,
       name: this.name,
       method: this.method as HttpMethod | 'all',
       path: this.path as string,

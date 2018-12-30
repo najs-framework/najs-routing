@@ -9,6 +9,13 @@ describe('Route', function () {
             expect(JSON.stringify(route)).toEqual(JSON.stringify({ prefix: '', middleware: [], isMerged: false }));
         });
     });
+    describe('.setType()', function () {
+        it('is chainable, simply a setter of "type" property', function () {
+            const route = new Route_1.Route();
+            expect(route.setType('any') === route).toBe(true);
+            expect(route['type']).toEqual('any');
+        });
+    });
     describe('.setMethod()', function () {
         it('is chainable, simply a setter of "method" property', function () {
             const route = new Route_1.Route();
@@ -131,6 +138,7 @@ describe('Route', function () {
                 .setMiddleware('a');
             route.mergeParentData(parent);
             expect(route.getData()).toEqual({
+                type: undefined,
                 name: undefined,
                 method: 'GET',
                 path: '/',
@@ -151,6 +159,7 @@ describe('Route', function () {
                 .setMiddleware('a');
             route.mergeParentData(parent);
             expect(route.getData()).toEqual({
+                type: undefined,
                 name: undefined,
                 method: 'GET',
                 path: '/',
@@ -171,6 +180,7 @@ describe('Route', function () {
                 .setMiddleware('a');
             route.mergeParentData(parent);
             expect(route.getData()).toEqual({
+                type: undefined,
                 name: undefined,
                 method: 'GET',
                 path: '/',
@@ -181,6 +191,7 @@ describe('Route', function () {
             parent.setPrefix('new-prefix').setMiddleware('b', 'c');
             route.mergeParentData(parent);
             expect(route.getData()).toEqual({
+                type: undefined,
                 name: undefined,
                 method: 'GET',
                 path: '/',
@@ -222,6 +233,7 @@ describe('Route', function () {
                 .setPrefix('prefix')
                 .setMiddleware('a')
                 .getData(parent)).toEqual({
+                type: undefined,
                 name: undefined,
                 method: 'GET',
                 path: '/',

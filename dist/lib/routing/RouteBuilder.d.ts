@@ -5,12 +5,13 @@ import HttpMethod = NajsRouting.HttpMethod;
 import Middleware = NajsRouting.Middleware;
 import Target = NajsRouting.Target;
 import IRoute = NajsRouting.IRoute;
+import IRouteData = NajsRouting.IRouteData;
 import IRouteBuilder = NajsRouting.IRouteBuilder;
 import RouteManagerContract = NajsFramework.Contracts.Routing.RouteManager;
 import { Route } from './Route';
-export interface RouteBuilder<T extends Target = Target, M = Middleware> extends NajsRouting.Grammar.Routing<T, M> {
+export interface RouteBuilder<T = Target, M = Middleware> extends NajsRouting.Grammar.Routing<T, M> {
 }
-export declare class RouteBuilder<T extends Target = Target, M = Middleware> implements IRouteBuilder<T, M> {
+export declare class RouteBuilder<T = Target, M = Middleware> implements IRouteBuilder<T, M> {
     protected manager: RouteManagerContract<T, M>;
     protected route: Route<T, M>;
     protected children: IRouteBuilder<T, M>[];
@@ -21,7 +22,13 @@ export declare class RouteBuilder<T extends Target = Target, M = Middleware> imp
     validateByResolvers(item: M | T, resolvers: Array<{
         isValid(item: M | T): boolean;
     }>): boolean;
-    getRoutes(parent?: IRoute<T, M>): IRoute<T, M>[];
+    resolveMiddleware(middleware: M): any;
+    resolveTarget(target: T): any;
+    resolveByResolvers(item: M | T, resolvers: Array<{
+        isValid(item: M | T): boolean;
+        resolve(item: M | T): any;
+    }>): any;
+    getRoutes(parent?: IRoute<T, M>): IRouteData<T, M>[];
     isContainer(): boolean;
     appendChild(builder: IRouteBuilder<T, M>): void;
     middleware(...list: Array<M | M[]>): any;

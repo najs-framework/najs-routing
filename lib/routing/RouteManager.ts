@@ -15,17 +15,21 @@ import TargetResolver = NajsFramework.Contracts.Routing.TargetResolver
 
 import { flatten } from 'lodash'
 import { Facade } from 'najs-facade'
+import { register } from 'najs-binding'
+import { ClassNames } from '../constants'
 import { RouteNotFoundError } from '../errors/RouteNotFoundError'
 
-export class RouteManager<T extends Target = Target, M = Middleware> extends Facade
+export class RouteManager<T = Target, M = Middleware> extends Facade
   implements NajsFramework.Contracts.Routing.RouteManager<T, M> {
+  static className: string = ClassNames.RouteManager
+
   protected changed: boolean = false
   protected builders: IRouteBuilder<T, M>[]
   protected routes: IRoute<T, M>[]
   protected routesNamed: { [key in string]: IRoute<T, M> }
-  protected middlewareRegistered: { [key in string]: MiddlewareResolver<object, M> }
+  protected middlewareRegistered: { [key in string]: MiddlewareResolver<any, M> }
   protected middlewareResolvers: MiddlewareResolver<object, M>[]
-  protected targetRegistered: { [key in string]: TargetResolver<object, T> }
+  protected targetRegistered: { [key in string]: TargetResolver<any, T> }
   protected targetResolvers: TargetResolver<object, T>[]
 
   constructor() {
@@ -38,6 +42,10 @@ export class RouteManager<T extends Target = Target, M = Middleware> extends Fac
     this.targetResolvers = []
     this.middlewareRegistered = {}
     this.middlewareResolvers = []
+  }
+
+  getClassName() {
+    return ClassNames.RouteManager
   }
 
   isChanged(): boolean {
@@ -91,13 +99,13 @@ export class RouteManager<T extends Target = Target, M = Middleware> extends Fac
     return this.routesNamed[name]
   }
 
-  registerTargetResolver<V extends object>(resolver: TargetResolver<V, T>, name: string): this {
+  registerTargetResolver<V>(resolver: TargetResolver<V, T>, name: string): this {
     this.targetRegistered[name] = resolver
     this.targetResolvers = Object.values(this.targetRegistered)
     return this
   }
 
-  registerMiddlewareResolver<V extends object>(resolver: MiddlewareResolver<V, M>, name: string): this {
+  registerMiddlewareResolver<V>(resolver: MiddlewareResolver<V, M>, name: string): this {
     this.middlewareRegistered[name] = resolver
     this.middlewareResolvers = Object.values(this.middlewareRegistered)
     return this
@@ -111,3 +119,5 @@ export class RouteManager<T extends Target = Target, M = Middleware> extends Fac
     return this.middlewareResolvers
   }
 }
+
+register(RouteManager, ClassNames.RouteManager)
