@@ -49,22 +49,26 @@ export class RouteBuilder<T = Target, M = Middleware> implements IRouteBuilder<T
     return false
   }
 
-  resolveMiddleware(middleware: M): any {
-    return this.resolveByResolvers(middleware, this.manager.getMiddlewareResolvers())
+  resolveMiddleware(middleware: M, route: IRoute<T, M>): any {
+    return this.resolveByResolvers(middleware, route, this.manager.getMiddlewareResolvers())
   }
 
-  resolveTarget(target: T): any {
-    return this.resolveByResolvers(target, this.manager.getTargetResolvers())
+  resolveTarget(target: T, route: IRoute<T, M>): any {
+    return this.resolveByResolvers(target, route, this.manager.getTargetResolvers())
   }
 
-  resolveByResolvers(item: M | T, resolvers: Array<{ isValid(item: M | T): boolean; resolve(item: M | T): any }>): any {
+  resolveByResolvers(
+    item: M | T,
+    route: IRoute<T, M>,
+    resolvers: Array<{ isValid(item: M | T): boolean; resolve(item: M | T, route: any): any }>
+  ): any {
     if (resolvers.length === 0) {
       return undefined
     }
 
     for (const resolver of resolvers) {
       if (resolver.isValid(item)) {
-        return resolver.resolve(item)
+        return resolver.resolve(item, route)
       }
     }
     return undefined
@@ -74,8 +78,8 @@ export class RouteBuilder<T = Target, M = Middleware> implements IRouteBuilder<T
     if (this.children.length === 0) {
       const data = this.route.getData(parent as any)
       if (data) {
-        data['resolvedMiddleware'] = data.middleware!.map(middleware => this.resolveMiddleware(middleware))
-        data['resolvedTarget'] = this.resolveTarget(data.target!)
+        data['resolvedMiddleware'] = data.middleware.map(middleware => this.resolveMiddleware(middleware, data))
+        data['resolvedTarget'] = this.resolveTarget(data.target, data)
         return [data as IRouteData<T, M>]
       }
       return []

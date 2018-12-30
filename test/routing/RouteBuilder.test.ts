@@ -97,7 +97,7 @@ describe('RouteBuilder', function() {
     it('returns undefined if there is no resolvers provided by RouteManager', function() {
       const manager = new RouteManager()
       const builder = new RouteBuilder(manager)
-      expect(builder.resolveMiddleware('any')).toBeUndefined()
+      expect(builder.resolveMiddleware('any', {} as any)).toBeUndefined()
     })
 
     it('loops middlewareResolvers provided by RouteManager then returns .resolve() if .isValid() of any resolver returns true', function() {
@@ -134,9 +134,9 @@ describe('RouteBuilder', function() {
         .registerMiddlewareResolver(resolverB, 'b')
         .registerMiddlewareResolver(resolverC, 'c')
       const builder = new RouteBuilder(manager)
-      expect(builder.resolveMiddleware('a')).toEqual('a-resolved')
-      expect(builder.resolveMiddleware('b')).toEqual('b-resolved')
-      expect(builder.resolveMiddleware('any')).toBeUndefined()
+      expect(builder.resolveMiddleware('a', {} as any)).toEqual('a-resolved')
+      expect(builder.resolveMiddleware('b', {} as any)).toEqual('b-resolved')
+      expect(builder.resolveMiddleware('any', {} as any)).toBeUndefined()
     })
   })
 
@@ -144,7 +144,7 @@ describe('RouteBuilder', function() {
     it('returns undefined if there is no resolvers provided by RouteManager', function() {
       const manager = new RouteManager()
       const builder = new RouteBuilder(manager)
-      expect(builder.resolveTarget('any')).toBeUndefined()
+      expect(builder.resolveTarget('any', {} as any)).toBeUndefined()
     })
 
     it('loops targetResolvers provided by RouteManager then returns .resolve() if .isValid() of any resolver returns true', function() {
@@ -181,9 +181,9 @@ describe('RouteBuilder', function() {
         .registerTargetResolver(resolverB, 'b')
         .registerTargetResolver(resolverC, 'c')
       const builder = new RouteBuilder(manager)
-      expect(builder.resolveTarget('a')).toEqual('a-resolved')
-      expect(builder.resolveTarget('b')).toEqual('b-resolved')
-      expect(builder.resolveTarget('any')).toBeUndefined()
+      expect(builder.resolveTarget('a', {} as any)).toEqual('a-resolved')
+      expect(builder.resolveTarget('b', {} as any)).toEqual('b-resolved')
+      expect(builder.resolveTarget('any', {} as any)).toBeUndefined()
     })
   })
 
@@ -220,6 +220,9 @@ describe('RouteBuilder', function() {
           resolvedTarget: 'target-resolved'
         }
       ])
+      expect(resolveMiddlewareStub.firstCall.calledWith('a', routeRata)).toBe(true)
+      expect(resolveMiddlewareStub.secondCall.calledWith('b', routeRata)).toBe(true)
+      expect(resolveTargetStub.calledWith('target', routeRata)).toBe(true)
     })
 
     it('calls "route".mergeParentData() then map children with it\'s .getRoutes() function', function() {

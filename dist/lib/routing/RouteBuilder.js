@@ -30,19 +30,19 @@ class RouteBuilder {
         }
         return false;
     }
-    resolveMiddleware(middleware) {
-        return this.resolveByResolvers(middleware, this.manager.getMiddlewareResolvers());
+    resolveMiddleware(middleware, route) {
+        return this.resolveByResolvers(middleware, route, this.manager.getMiddlewareResolvers());
     }
-    resolveTarget(target) {
-        return this.resolveByResolvers(target, this.manager.getTargetResolvers());
+    resolveTarget(target, route) {
+        return this.resolveByResolvers(target, route, this.manager.getTargetResolvers());
     }
-    resolveByResolvers(item, resolvers) {
+    resolveByResolvers(item, route, resolvers) {
         if (resolvers.length === 0) {
             return undefined;
         }
         for (const resolver of resolvers) {
             if (resolver.isValid(item)) {
-                return resolver.resolve(item);
+                return resolver.resolve(item, route);
             }
         }
         return undefined;
@@ -51,8 +51,8 @@ class RouteBuilder {
         if (this.children.length === 0) {
             const data = this.route.getData(parent);
             if (data) {
-                data['resolvedMiddleware'] = data.middleware.map(middleware => this.resolveMiddleware(middleware));
-                data['resolvedTarget'] = this.resolveTarget(data.target);
+                data['resolvedMiddleware'] = data.middleware.map(middleware => this.resolveMiddleware(middleware, data));
+                data['resolvedTarget'] = this.resolveTarget(data.target, data);
                 return [data];
             }
             return [];

@@ -5,7 +5,7 @@ export class TargetDummyResolver implements NajsFramework.Contracts.Routing.Targ
     return true
   }
 
-  resolve(target: string) {
+  resolve(target: string, route: any) {
     return target + '-resolved'
   }
 }

@@ -5,7 +5,7 @@ export class MiddlewareDummyResolver implements NajsFramework.Contracts.Routing.
     return true
   }
 
-  resolve(middleware: string) {
+  resolve(middleware: string, route: any) {
     return middleware + '-resolved'
   }
 }

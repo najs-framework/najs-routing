@@ -5,7 +5,7 @@ class TargetDummyResolver {
     isValid(target) {
         return true;
     }
-    resolve(target) {
+    resolve(target, route) {
         return target + '-resolved';
     }
 }

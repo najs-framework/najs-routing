@@ -5,7 +5,7 @@ class MiddlewareDummyResolver {
     isValid(middleware) {
         return true;
     }
-    resolve(middleware) {
+    resolve(middleware, route) {
         return middleware + '-resolved';
     }
 }

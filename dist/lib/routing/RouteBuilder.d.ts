@@ -22,11 +22,11 @@ export declare class RouteBuilder<T = Target, M = Middleware> implements IRouteB
     validateByResolvers(item: M | T, resolvers: Array<{
         isValid(item: M | T): boolean;
     }>): boolean;
-    resolveMiddleware(middleware: M): any;
-    resolveTarget(target: T): any;
-    resolveByResolvers(item: M | T, resolvers: Array<{
+    resolveMiddleware(middleware: M, route: IRoute<T, M>): any;
+    resolveTarget(target: T, route: IRoute<T, M>): any;
+    resolveByResolvers(item: M | T, route: IRoute<T, M>, resolvers: Array<{
         isValid(item: M | T): boolean;
-        resolve(item: M | T): any;
+        resolve(item: M | T, route: any): any;
     }>): any;
     getRoutes(parent?: IRoute<T, M>): IRouteData<T, M>[];
     isContainer(): boolean;
